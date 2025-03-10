@@ -1,36 +1,145 @@
 <!DOCTYPE html>
-<!-- Coding By CodingNepal - www.codingnepalweb.com -->
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Glassmorphism Login Form | CodingNepal</title>
-  <link rel="stylesheet" href="login.css">
-</head>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <title>Login | Register - Barbers & Hair Cutting</title>
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./favicon.svg" type="image/x-icon">
+  </head>
 <body>
-  <div class="wrapper">
-    <form action="#">
-      <h2>Login</h2>
-        <div class="input-field">
-        <input type="text" required>
-        <label>Enter your email</label>
+  <div class="container">
+    <input type="checkbox" id="flip">
+    <div class="cover">
+      <div class="front">
+        <div class="text">
+          <span class="text-1">Every new friend is a <br> new adventure</span>
+          <span class="text-2">Let's get connected</span>
+        </div>
       </div>
-      <div class="input-field">
-        <input type="password" required>
-        <label>Enter your password</label>
+      <div class="back">
+        <div class="text">
+          <span class="text-1">Complete miles of journey <br> with one step</span>
+          <span class="text-2">Let's get started</span>
+        </div>
       </div>
-      <div class="forget">
-        <label for="remember">
-          <input type="checkbox" id="remember">
-          <p>Remember me</p>
-        </label>
-        <a href="#">Forgot password?</a>
-      </div>
-      <button type="submit">Log In</button>
-      <div class="register">
-        <p>Don't have an account? <a href="#">Register</a></p>
-      </div>
-    </form>
+    </div>
+    <div class="forms">
+        <div class="form-content">
+          <div class="login-form">
+            <div class="title">Login</div>
+            <form id="loginForm">
+              <div class="input-boxes">
+                <div class="input-box">
+                  <i class="fas fa-envelope"></i>
+                  <input type="text" placeholder="Enter your email" required>
+                </div>
+                <div class="input-box">
+                  <i class="fas fa-lock"></i>
+                  <input type="password" placeholder="Enter your password" required>
+                </div>
+                <div class="text"><a href="#">Forgot password?</a></div>
+                <div class="button input-box">
+                  <input type="submit" value="Submit">
+                </div>
+                <div class="text sign-up-text">Don't have an account? <label for="flip">Signup now</label></div>
+              </div>
+            </form>
+          </div>
+          
+          <!-- Signup Form -->
+          <div class="signup-form">
+            <div class="title">Signup</div>
+            <form id="signupForm">
+              <div class="input-boxes">
+                <div class="input-box">
+                  <i class="fas fa-user"></i>
+                  <input type="text" placeholder="Enter your name" required>
+                </div>
+                <div class="input-box">
+                  <i class="fas fa-envelope"></i>
+                  <input type="email" placeholder="Enter your email" required>
+                </div>
+                <div class="input-box">
+                  <i class="fas fa-lock"></i>
+                  <input type="password" placeholder="Enter your password" required>
+                </div>
+                <div class="button input-box">
+                  <input type="submit" value="Submit">
+                </div>
+                <div class="text sign-up-text">Already have an account? <label for="flip">Login now</label></div>
+              </div>
+            </form>
+          </div>
+        </div>
+    </div>
   </div>
+
+  <script>
+    // Login Form submission
+    document.querySelector('#loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault(); // Prevent the default form submission
+      
+      const email = document.querySelector('#loginForm input[type="text"]').value;
+      const password = document.querySelector('#loginForm input[type="password"]').value;
+  
+      try {
+        const response = await fetch('http://localhost:5000/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
+        });
+  
+        const data = await response.json();
+        console.log(data);
+  
+        if (data.message === 'Login successful') {
+          alert('Login successful');
+          // You can redirect to another page here, if needed
+          window.location.href = '/index.html';
+        } else {
+          alert('Invalid credentials');
+        }
+      } catch (error) {
+        console.log('Error:', error);
+      }
+    });
+
+    // Signup Form submission
+    document.querySelector('#signupForm').addEventListener('submit', async (e) => {
+  e.preventDefault(); // Prevent the default form submission
+
+  const name = document.querySelector('#signupForm input[type="text"]').value;
+  const email = document.querySelector('#signupForm input[type="email"]').value;  // Ensure this is type="email"
+  const password = document.querySelector('#signupForm input[type="password"]').value;
+
+  try {
+    const response = await fetch('http://localhost:5000/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name, email, password }),
+    });
+
+    const data = await response.json();
+    console.log(data);
+
+    if (data.status === 201) {
+      alert('Signup successful');
+      // Redirect or update UI as needed
+    } else {
+      alert(data.message);  // Show the error message from the backend
+    }
+  } catch (error) {
+    console.log('Error:', error);
+    alert('Error during signup');
+  }
+});
+
+  </script>
 </body>
 </html>
